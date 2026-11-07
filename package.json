@@ -1,16 +1,16 @@
 {
-  "name": "Nana Fox 2.0",
+  "name": "nanafox",
   "version": "1.0.0",
   "description": "Um navegador de internet baseado no Chromium",
-  "author": "nana <nanadev@gmail.com>",
+  "author": "Nana <nanadev@gmail.com>",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder"
   },
   "build": {
-    "appId": "com.nanafox2.0.nanafox2.0",
-    "productName": "Nana Fox 2.0",
+    "appId": "com.nanafox.browser",
+    "productName": "NanaFox",
     "directories": {
       "output": "dist"
     },
@@ -19,7 +19,7 @@
     },
     "linux": {
       "target": ["AppImage", "deb"],
-      "maintainer": "nana <nanadev@gmail.com>"
+      "maintainer": "Nana <nanadev@gmail.com>"
     }
   },
   "devDependencies": {
@@ -27,3 +27,4 @@
     "electron-builder": "^24.13.3"
   }
 }
+
