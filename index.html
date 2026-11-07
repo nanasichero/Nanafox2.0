@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Meu Navegador</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #202124;
+            color: #bdc1c6;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #toolbar {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            background-color: #35363a;
+            gap: 8px;
+            border-bottom: 1px solid #1f2022;
+        }
+        button {
+            background: none;
+            border: none;
+            color: #bdc1c6;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #505256;
+            color: #fff;
+        }
+        #url-bar {
+            flex: 1;
+            background-color: #202124;
+            border: 1px solid #5f6368;
+            border-radius: 20px;
+            padding: 6px 14px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+        #url-bar:focus {
+            border-color: #8ab4f8;
+        }
+        #view-container {
+            flex: 1;
+            position: relative;
+            background-color: #fff;
+        }
+        webview {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="toolbar">
+        <button id="back-btn" title="Voltar">&#129144;</button>
+        <button id="forward-btn" title="Avançar">&#129146;</button>
+        <button id="reload-btn" title="Recarregar">&#8635;</button>
+        <input type="text" id="url-bar" placeholder="Pesquise na web ou digite um URL..." />
+        <button id="go-btn" title="Ir">&#128270;</button>
+    </div>
+
+    <div id="view-container">
+        <webview id="browser-view" src="https://www.google.com"></webview>
+    </div>
+
+    <script>
+        const webview = document.getElementById('browser-view');
+        const urlBar = document.getElementById('url-bar');
+        const backBtn = document.getElementById('back-btn');
+        const forwardBtn = document.getElementById('forward-btn');
+        const reloadBtn = document.getElementById('reload-btn');
+        const goBtn = document.getElementById('go-btn');
+
+        webview.addEventListener('did-navigate', (event) => {
+            urlBar.value = event.url;
+        });
+
+        webview.addEventListener('did-navigate-in-page', (event) => {
+            urlBar.value = event.url;
+        });
+
+        function navegar() {
+            let url = urlBar.value.trim();
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                if (url.includes('.') && !url.includes(' ')) {
+                    url = 'https://' + url;
+                } else {
+                    url = `https://www.google.com/search?q=${encodeURIComponent(url)}`;
+                }
+            }
+            webview.src = url;
+        }
+
+        goBtn.addEventListener('click', navegar);
+        urlBar.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') navegar();
+        });
+
+        backBtn.addEventListener('click', () => {
+            if (webview.canGoBack()) webview.goBack();
+        });
+
+        forwardBtn.addEventListener('click', () => {
+            if (webview.canGoForward()) webview.goForward();
+        });
+
+        reloadBtn.addEventListener('click', () => {
+            webview.reload();
+        });
+    </script>
+</body>
+</html>
