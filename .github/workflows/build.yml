@@ -1,39 +1,29 @@
-name: Build Browser
-
-on: [push]
-
-jobs:
-  build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
-    steps:
-    - name: Clonar Repositorio
-      uses: actions/checkout@v4
-
-    - name: Configurar Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
-
-    - name: Instalar Dependencias do Sistema (Linux)
-      if: runner.os == 'Linux'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libopenjp2-7 libgbm1 libasound2t64
-
-    - name: Instalar Dependencias do Projeto
-      run: npm install
-
-    - name: Compilar com Electron Builder
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: npx electron-builder --publish never
-
-    - name: Enviar Artefatos
-      uses: actions/upload-artifact@v4
-      with:
-        name: instaladores-${{ matrix.os }}
-        path: dist/
-
+{
+  "name": "meu-navegador",
+  "version": "1.0.0",
+  "description": "Um navegador de internet baseado no Chromium",
+  "author": "Seu Nome <seu@email.com>",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "build": {
+    "appId": "com.navegador.avancado",
+    "productName": "MeuNavegador",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": ["nsis"]
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "maintainer": "Seu Nome <seu@email.com>"
+    }
+  },
+  "devDependencies": {
+    "electron": "^28.3.3",
+    "electron-builder": "^24.13.3"
+  }
+}
