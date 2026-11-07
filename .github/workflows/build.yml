@@ -15,9 +15,15 @@ jobs:
     - name: Configurar Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 18
+        node-version: 20
 
-    - name: Instalar Dependencias
+    - name: Instalar Dependencias do Sistema (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libopenjp2-7 libgbm1 libasound2t64
+
+    - name: Instalar Dependencias do Projeto
       run: npm install
 
     - name: Compilar com Electron Builder
@@ -30,3 +36,4 @@ jobs:
       with:
         name: instaladores-${{ matrix.os }}
         path: dist/
+
