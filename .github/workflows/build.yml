@@ -1,0 +1,25 @@
+name: Build Browser
+on: [push]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Clonar Repositorio
+      uses: actions/checkout@v4
+    - name: Configurar Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+    - name: Instalar Dependencias
+      run: npm install
+    - name: Compilar com Electron Builder
+      uses: samuelmeuli/action-electron-builder@v5
+    - name: Enviar Artefatos
+      uses: actions/upload-artifact@v4
+      with:
+        name: instaladores-${{ matrix.os }}
+        path: dist/
